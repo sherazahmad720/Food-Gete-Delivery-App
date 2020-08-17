@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        padding: EdgeInsets.only(top: 50, left: 20, right: 20),
+        padding: EdgeInsets.only(left: 20, right: 20),
         children: [
           HomeTopInfo(),
           FoodCategory(),
