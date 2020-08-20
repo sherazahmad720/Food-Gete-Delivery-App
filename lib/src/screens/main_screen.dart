@@ -7,6 +7,7 @@ import 'package:food_gate/src/pages/order_page.dart';
 import 'package:food_gate/src/pages/profile_page.dart';
 
 import 'package:food_gate/src/scoped-model/main_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 // pages
 import '../pages/home_page.dart';
 
@@ -27,11 +28,10 @@ class _MainScreenState extends State<MainScreen> {
   ProfilePage profilePage;
   @override
   void initState() {
-    // : implement initState
-//cal the feth mothod on food
-    widget.model.fetchFood();
     homePage = HomePage();
     orderPage = OrderPage();
+    //NOTE for refresh indicator
+    // favoritePage = FavoritePage(model: widget.model);
     favoritePage = FavoritePage();
     profilePage = ProfilePage();
     pages = [homePage, favoritePage, orderPage, profilePage];

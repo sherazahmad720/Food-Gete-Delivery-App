@@ -41,11 +41,10 @@ class FoodModel extends Model {
           price: food.price,
           discount: food.discount);
       _foods.add(foodWithId);
-      print(_foods[0].description);
 
       _isLoading = false;
       notifyListeners();
-      fetchFood();
+      // fetchFood();
       return Future.value(true);
     } catch (e) {
       _isLoading = false;
@@ -55,14 +54,15 @@ class FoodModel extends Model {
     }
   }
 
-  void fetchFood() {
-    http.get("https://food-gate.firebaseio.com/foods.json")
-        // .get("https://my-json-server.typicode.com/typicode/demo/posts")
-        .then((http.Response response) {
-      final List<Food> foodItems = [];
-      // print("Fetching data ${response.body}");
+  Future fetchFood() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final http.Response response =
+          await http.get("https://food-gate.firebaseio.com/foods.json");
+
       final Map<String, dynamic> fetchedData = json.decode(response.body);
-      print(fetchedData);
+      final List<Food> foodItems = [];
       fetchedData.forEach((String id, dynamic foodData) {
         Food foodItem = Food(
             id: id,
@@ -74,23 +74,15 @@ class FoodModel extends Model {
         foodItems.add(foodItem);
       });
       _foods = foodItems;
-      // print(foodItems);
-      notifyListeners();
-      // fetchedData.forEach((data) {
-      //   Food food = Food(
-      //       id: data["id"],
-      //       category: data["category_Id"],
-      //       name: data["title"],
-      //       price: data["price"],
-      //       discount: data["discount"],
-      //       imagePath: data["image_path"],
-      //       rating: data["rating"]);
+      _isLoading = false;
 
-      //   fetchedFoodItems.add(food);
-      //   print("this should run on first$food");
-      // });
-      // _foods = fetchedFoodItems;
-      // print("This should run on 2nd");
-    });
+      notifyListeners();
+      return Future.value(true);
+    } catch (error) {
+      _isLoading = false;
+
+      notifyListeners();
+      return Future.value(false);
+    }
   }
 }
