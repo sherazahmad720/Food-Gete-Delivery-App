@@ -16,6 +16,10 @@ class FoodModel extends Model {
     return List.from(_foods);
   }
 
+  int get foodLength {
+    return _foods.length;
+  }
+
   Future<bool> addFood(Food food) async {
     _isLoading = true;
     notifyListeners();
@@ -41,10 +45,11 @@ class FoodModel extends Model {
           price: food.price,
           discount: food.discount);
       _foods.add(foodWithId);
+      // print(_foods[0].description);
 
       _isLoading = false;
       notifyListeners();
-      // fetchFood();
+      fetchFood();
       return Future.value(true);
     } catch (e) {
       _isLoading = false;

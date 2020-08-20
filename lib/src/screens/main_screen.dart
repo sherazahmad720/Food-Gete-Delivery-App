@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_gate/src/admin/pages/add_food_items.dart';
-import 'package:food_gate/src/pages/favorite_page.dart';
+import 'package:food_gate/src/pages/explore_page.dart';
 import 'package:food_gate/src/pages/order_page.dart';
 import 'package:food_gate/src/pages/profile_page.dart';
 
 import 'package:food_gate/src/scoped-model/main_model.dart';
-import 'package:scoped_model/scoped_model.dart';
+
 // pages
 import '../pages/home_page.dart';
 
@@ -24,17 +24,17 @@ class _MainScreenState extends State<MainScreen> {
   Widget currentPage;
   HomePage homePage;
   OrderPage orderPage;
-  FavoritePage favoritePage;
+  ExplorePage explorePage;
   ProfilePage profilePage;
   @override
   void initState() {
     homePage = HomePage();
     orderPage = OrderPage();
     //NOTE for refresh indicator
-    // favoritePage = FavoritePage(model: widget.model);
-    favoritePage = FavoritePage();
+    // explorePage = ExplorePage(model: widget.model);
+    explorePage = ExplorePage();
     profilePage = ProfilePage();
-    pages = [homePage, favoritePage, orderPage, profilePage];
+    pages = [homePage, explorePage, orderPage, profilePage];
     currentPage = homePage;
     super.initState();
   }
@@ -47,6 +47,16 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: Colors.white,
           elevation: 0,
           iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            currentTabIndex == 0
+                ? "Food Gate App"
+                : currentTabIndex == 1
+                    ? "All Food Items"
+                    : currentTabIndex == 2 ? "Orders" : "Profile",
+            style: TextStyle(
+                color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
         ),
         drawer: Drawer(
           child: Column(

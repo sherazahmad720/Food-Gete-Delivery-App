@@ -5,14 +5,14 @@ import 'package:food_gate/src/widgets/food_items_card.dart';
 // import 'package:food_gate/src/widgets/small_button.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class FavoritePage extends StatefulWidget {
+class ExplorePage extends StatefulWidget {
   // final MainModel model;
-  // FavoritePage({this.model});
+  // ExplorePage({this.model});
   @override
-  _FavoritePageState createState() => _FavoritePageState();
+  _ExplorePageState createState() => _ExplorePageState();
 }
 
-class _FavoritePageState extends State<FavoritePage> {
+class _ExplorePageState extends State<ExplorePage> {
   // @override
   // void initState() {
   //   // : implement initState
@@ -25,19 +25,26 @@ class _FavoritePageState extends State<FavoritePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: ScopedModelDescendant<MainModel>(
-          builder: (BuildContext context, Widget child, MainModel model) {
+          builder: (BuildContext sctx, Widget child, MainModel model) {
         model.fetchFood();
-        List<Food> food = model.food;
+        // List<Food> food = model.food;
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: RefreshIndicator(
             onRefresh: model.fetchFood,
-            child: ListView(
+            child: ListView.builder(
+              itemCount: model.foodLength,
+              itemBuilder: (BuildContext lctx, int index) {
+                return GestureDetector(
+                  onTap: () {},
+                  child: FoodItemsCard(
+                      model.food[index].name,
+                      model.food[index].price.toString(),
+                      model.food[index].description),
+                );
+              },
+
               // crossAxisAlignment: CrossAxisAlignment.start,
-              children: food.map((Food food) {
-                return FoodItemsCard(
-                    food.name, food.price.toString(), food.description);
-              }).toList(),
             ),
           ),
         );
