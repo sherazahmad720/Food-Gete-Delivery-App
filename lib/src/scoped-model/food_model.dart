@@ -90,4 +90,62 @@ class FoodModel extends Model {
       return Future.value(false);
     }
   }
+
+  Future<bool> updateFood(Map<String, dynamic> foodData, foodId) async {
+    _isLoading = true;
+    notifyListeners();
+    Food theFood = getFoodById(foodId);
+    int foodIndex = _foods.indexOf(theFood);
+    try {
+      await http.put("https://food-gate.firebaseio.com/foods/${foodId}.json",
+          body: json.encode(foodData));
+      Food updateFoodItem = Food(
+          id: foodId,
+          name: foodData["title"],
+          category: foodData["category"],
+          discount: foodData["discount"],
+          price: foodData["price"],
+          description: foodData["description"]);
+      _foods[foodIndex] = updateFoodItem;
+      _isLoading = false;
+      notifyListeners();
+      return Future.value(true);
+    } catch (error) {
+      print("error is $error");
+      _isLoading = false;
+      notifyListeners();
+      return Future.value(false);
+    }
+  }
+
+  Future<bool> deleteFood(String foodId) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      final http.Response response = await http
+          .delete("https://food-gate.firebaseio.com/foods/${foodId}.json");
+      //delet item from list
+      _foods.removeWhere((Food food) => food.id == foodId);
+      _isLoading = false;
+      notifyListeners();
+      return Future.value(true);
+    } catch (error) {
+      _isLoading = false;
+      notifyListeners();
+      return Future.value(false);
+    }
+  }
+
+  Food getFoodById(String foodId) {
+    Food food2;
+    for (int i = 0; i < _foods.length; i++) {
+      if (_foods[i].id == foodId) {
+        food2 = _foods[i];
+        print("foood 2 is $food2");
+        print("_food is ${_foods[i]}");
+        break;
+      }
+    }
+    return food2;
+  }
 }

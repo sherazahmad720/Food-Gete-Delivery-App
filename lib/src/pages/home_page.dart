@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
           ),
           ScopedModelDescendant<MainModel>(
               builder: (BuildContext context, Widget child, MainModel model) {
+            model.fetchFood();
             return Column(children: model.food.map(_buildFoodItems).toList());
           })
         ],
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> {
       child: BoughtFood(
         id: food.id,
         name: food.name,
-        imagePath: food.imagePath,
+        imagePath: "assets/images/coffee.png",
         category: food.category,
         discount: food.discount.toString(),
         price: food.price.toString(),
