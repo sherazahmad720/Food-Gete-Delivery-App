@@ -150,6 +150,7 @@ class _AddFoodItemsState extends State<AddFoodItems> {
         var value = await addFood(food);
         if (value) {
           Navigator.of(context).pop();
+          Navigator.of(context).pop();
           SnackBar snackBar = SnackBar(
             content: Text("Food Iteam Added Successfully"),
           );
