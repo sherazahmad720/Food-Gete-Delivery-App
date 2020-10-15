@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:food_gate/src/enum/auth_mode.dart';
 import 'package:food_gate/src/pages/signin_page.dart';
-import 'package:food_gate/src/scoped-model/main_model.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:food_gate/src/scoped-model/user_scoped_model.dart';
+import 'package:food_gate/src/widgets/show_dialoge.dart';
+import 'package:get/get.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -9,12 +11,14 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final signupController = Get.put(UserModel());
   bool _togleVisibility = true;
   // bool _togleConfirmVisibility = true;
   String _email;
   String _userName;
   String _password;
   GlobalKey<FormState> _formKey = GlobalKey();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   Widget _buildEmailTextField() {
     return TextFormField(
       onSaved: (String email) {
@@ -104,6 +108,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -193,11 +198,12 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Widget _buildSignUpButton() {
-    return ScopedModelDescendant(
-      builder: (BuildContext sctx, Widget child, MainModel model) {
+    return GetBuilder(
+      builder: (_) {
         return GestureDetector(
           onTap: () {
-            onSubmit(model.authenticate);
+            onSubmit();
+            showLoadingIndicator(context, "Signing up ....");
           },
           child: Container(
             height: 50,
@@ -219,11 +225,28 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  void onSubmit(Function authenticate) {
+  void onSubmit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       print("email is $_email, and password is $_password");
-      authenticate(_email, _password);
+
+      signupController
+          .authenticate(_email, _password, _userName, authMode: AuthMode.Signup)
+          .then((final response) {
+        // Navigator.of(context).pop();
+        if (!response["hasError"]) {
+          // print(response["message"]);
+          Navigator.of(context).pop();
+          Navigator.of(context).pushReplacementNamed("/mainscreen");
+        } else {
+          Navigator.of(context).pop();
+          print(response["message"]);
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 2),
+              content: Text(response["message"])));
+        }
+      });
     }
   }
 }

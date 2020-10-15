@@ -1,30 +1,30 @@
 import 'dart:convert';
 
 import 'package:food_gate/src/models/food_model.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
 
-class FoodModel extends Model {
-  List<Food> _foods = [];
+class FoodModel extends GetxController {
+  List<Food> foods = [];
   bool _isLoading = false;
   bool get isLoading {
     return _isLoading;
   }
 
   List<Food> get food {
-    return List.from(_foods);
+    return List.from(foods);
   }
 
   int get foodLength {
-    return _foods.length;
+    return foods.length;
   }
 
   Future<bool> addFood(Food food) async {
     _isLoading = true;
-    notifyListeners();
+    update();
     try {
-      // _foods.add(food);
+      // foods.add(food);
       final Map<String, dynamic> foodData = {
         "title": food.name,
         "category": food.category,
@@ -44,16 +44,16 @@ class FoodModel extends Model {
           description: food.description,
           price: food.price,
           discount: food.discount);
-      _foods.add(foodWithId);
-      // print(_foods[0].description);
+      foods.add(foodWithId);
+      // print(foods[0].description);
 
       _isLoading = false;
-      notifyListeners();
+      update();
       fetchFood();
       return Future.value(true);
     } catch (e) {
       _isLoading = false;
-      notifyListeners();
+      update();
       return Future.value(false);
       // print("Connection Error $e");
     }
@@ -61,7 +61,7 @@ class FoodModel extends Model {
 
   Future fetchFood() async {
     _isLoading = true;
-    notifyListeners();
+    update();
     try {
       final http.Response response =
           await http.get("https://food-gate.firebaseio.com/foods.json");
@@ -78,24 +78,24 @@ class FoodModel extends Model {
             price: foodData["price"]);
         foodItems.add(foodItem);
       });
-      _foods = foodItems;
+      foods = foodItems;
       _isLoading = false;
 
-      notifyListeners();
+      update();
       return Future.value(true);
     } catch (error) {
       _isLoading = false;
 
-      notifyListeners();
+      update();
       return Future.value(false);
     }
   }
 
   Future<bool> updateFood(Map<String, dynamic> foodData, foodId) async {
     _isLoading = true;
-    notifyListeners();
+    update();
     Food theFood = getFoodById(foodId);
-    int foodIndex = _foods.indexOf(theFood);
+    int foodIndex = foods.indexOf(theFood);
     try {
       await http.put("https://food-gate.firebaseio.com/foods/${foodId}.json",
           body: json.encode(foodData));
@@ -106,14 +106,14 @@ class FoodModel extends Model {
           discount: foodData["discount"],
           price: foodData["price"],
           description: foodData["description"]);
-      _foods[foodIndex] = updateFoodItem;
+      foods[foodIndex] = updateFoodItem;
       _isLoading = false;
-      notifyListeners();
+      update();
       return Future.value(true);
     } catch (error) {
       print("error is $error");
       _isLoading = false;
-      notifyListeners();
+      update();
       return Future.value(false);
     }
   }
@@ -121,28 +121,28 @@ class FoodModel extends Model {
   Future<bool> deleteFood(String foodId) async {
     try {
       _isLoading = true;
-      notifyListeners();
+      update();
       final http.Response response = await http
           .delete("https://food-gate.firebaseio.com/foods/${foodId}.json");
       //delet item from list
-      _foods.removeWhere((Food food) => food.id == foodId);
+      foods.removeWhere((Food food) => food.id == foodId);
       _isLoading = false;
-      notifyListeners();
+      update();
       return Future.value(true);
     } catch (error) {
       _isLoading = false;
-      notifyListeners();
+      update();
       return Future.value(false);
     }
   }
 
   Food getFoodById(String foodId) {
     Food food2;
-    for (int i = 0; i < _foods.length; i++) {
-      if (_foods[i].id == foodId) {
-        food2 = _foods[i];
+    for (int i = 0; i < foods.length; i++) {
+      if (foods[i].id == foodId) {
+        food2 = foods[i];
         print("foood 2 is $food2");
-        print("_food is ${_foods[i]}");
+        print("_food is ${foods[i]}");
         break;
       }
     }

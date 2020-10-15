@@ -3,6 +3,7 @@ import 'package:food_gate/src/models/food_model.dart';
 import 'package:food_gate/src/scoped-model/main_model.dart';
 import 'package:food_gate/src/widgets/button.dart';
 import 'package:food_gate/src/widgets/show_dialoge.dart';
+import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class AddFoodItems extends StatefulWidget {
@@ -76,13 +77,12 @@ class _AddFoodItemsState extends State<AddFoodItems> {
                     SizedBox(
                       height: 50,
                     ),
-                    ScopedModelDescendant(builder:
-                        (BuildContext context, Widget child, MainModel model) {
+                    GetBuilder(builder: (_) {
                       return GestureDetector(
                         onTap: () {
-                          onSubmit(model.addFood, model.updateFood);
+                          onSubmit(_.addFood, _.updateFood);
 
-                          if (model.isLoading) {
+                          if (_.isLoading) {
                             showLoadingIndicator(
                                 context,
                                 widget.food != null

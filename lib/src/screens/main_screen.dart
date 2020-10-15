@@ -6,14 +6,12 @@ import 'package:food_gate/src/pages/explore_page.dart';
 import 'package:food_gate/src/pages/order_page.dart';
 import 'package:food_gate/src/pages/profile_page.dart';
 
-import 'package:food_gate/src/scoped-model/main_model.dart';
-
 // pages
 import '../pages/home_page.dart';
 
 class MainScreen extends StatefulWidget {
-  final MainModel model;
-  MainScreen({this.model});
+  // final MainModel model;
+  MainScreen();
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -52,7 +50,9 @@ class _MainScreenState extends State<MainScreen> {
                 ? "Food Gate App"
                 : currentTabIndex == 1
                     ? "All Food Items"
-                    : currentTabIndex == 2 ? "Orders" : "Profile",
+                    : currentTabIndex == 2
+                        ? "Orders"
+                        : "Profile",
             style: TextStyle(
                 color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
           ),
@@ -97,14 +97,13 @@ class _MainScreenState extends State<MainScreen> {
               });
             },
             items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.home), title: Text("Home")),
+                  icon: Icon(Icons.explore), label: "Explore"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.explore), title: Text("Explore")),
+                  icon: Icon(Icons.shopping_cart), label: "Orders"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_cart), title: Text("Orders")),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person), title: Text("Profile")),
+                  icon: Icon(Icons.person), label: "Profile"),
             ]),
         body: currentPage,
       ),

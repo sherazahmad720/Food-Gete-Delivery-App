@@ -33,7 +33,7 @@ class _BoughtFoodState extends State<BoughtFood> {
               width: 340,
               child: Image(
                 image: AssetImage(widget.imagePath),
-                fit: BoxFit.cover,
+                fit: BoxFit.fitHeight,
               )),
           Positioned(
             left: 0,
@@ -41,11 +41,7 @@ class _BoughtFoodState extends State<BoughtFood> {
             child: Container(
               height: 60,
               width: 340,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Colors.black, Colors.black12],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter)),
+              decoration: BoxDecoration(color: Colors.black),
             ),
           ),
           Positioned(

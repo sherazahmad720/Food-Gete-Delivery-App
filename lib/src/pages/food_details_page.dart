@@ -10,6 +10,8 @@ class FoodDetailsPage extends StatefulWidget {
 }
 
 class _FoodDetailsPageState extends State<FoodDetailsPage> {
+  TextEditingController amountController = TextEditingController();
+  int amount = 1;
   var small_space = SizedBox(
     height: 10,
   );
@@ -69,18 +71,32 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(icon: Icon(Icons.add_circle), onPressed: null),
+                  IconButton(
+                      icon: Icon(Icons.remove_circle),
+                      onPressed: () {
+                        setState(() {
+                          if (amount > 1) {
+                            amount--;
+                          }
+                        });
+                      }),
                   SizedBox(
                     width: 15,
                   ),
                   Text(
-                    "1",
+                    amount.toString(),
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(
                     width: 15,
                   ),
-                  IconButton(icon: Icon(Icons.add_circle), onPressed: null)
+                  IconButton(
+                      icon: Icon(Icons.add_circle),
+                      onPressed: () {
+                        setState(() {
+                          amount++;
+                        });
+                      })
                 ],
               ),
               large_space,

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
-class OrderCard extends StatelessWidget {
+class OrderCard extends StatefulWidget {
+  @override
+  _OrderCardState createState() => _OrderCardState();
+}
+
+class _OrderCardState extends State<OrderCard> {
+  int amount = 1;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -18,15 +24,25 @@ class OrderCard extends StatelessWidget {
               child: Column(
                 children: [
                   InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        setState(() {
+                          if (amount < 1) {
+                            amount--;
+                          }
+                        });
+                      },
                       child: Icon(Icons.keyboard_arrow_up,
                           color: Color(0xffd3d3d3))),
                   Text(
-                    "1",
+                    amount.toString(),
                     style: TextStyle(fontSize: 18),
                   ),
                   InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        setState(() {
+                          amount++;
+                        });
+                      },
                       child: Icon(
                         Icons.keyboard_arrow_down,
                         color: Color(0xffd3d3d3),

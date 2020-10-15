@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_gate/src/pages/food_details_page.dart';
+import 'package:food_gate/src/scoped-model/food_model.dart';
 
-import 'package:food_gate/src/scoped-model/main_model.dart';
 import 'package:food_gate/src/widgets/bought_food.dart';
 import 'package:food_gate/src/widgets/food_category.dart';
 import 'package:food_gate/src/widgets/home_top_info.dart';
 import 'package:food_gate/src/widgets/search_field.dart';
-import 'package:scoped_model/scoped_model.dart';
-//data
-
-//model
-import '../models/food_model.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   // final FoodModel foodModel;
@@ -20,11 +16,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final homeController = Get.put(FoodModel());
   @override
   void initState() {
     print("This should run on third");
 
     super.initState();
+    homeController.fetchFood();
   }
 
   // List<Food> _foods = foods;
@@ -63,17 +61,17 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
             height: 20,
           ),
-          ScopedModelDescendant<MainModel>(
-              builder: (BuildContext context, Widget child, MainModel model) {
-            model.fetchFood();
-            return Column(children: model.food.map(_buildFoodItems).toList());
+          GetBuilder<FoodModel>(builder: (_) {
+            // _.fetchFood();
+            return Column(
+                children: [for (var data in _.foods) _buildFoodItems(data)]);
           })
         ],
       ),
     );
   }
 
-  Widget _buildFoodItems(Food food) {
+  _buildFoodItems(food) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
